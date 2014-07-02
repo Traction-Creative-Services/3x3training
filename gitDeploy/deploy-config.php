@@ -12,6 +12,8 @@
  * @version 1.2.2
  */
 
+define('PROJECT','3x3 Training');
+
 /**
  * Protect the script from unauthorized access by using a secret access token.
  * If it's not present in the access URL as a GET variable named `sat`
