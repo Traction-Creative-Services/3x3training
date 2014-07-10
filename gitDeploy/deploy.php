@@ -345,6 +345,7 @@ Cleaning up temporary files ...
 		break;
 	}
 }
+mail('martin.sheeks@gmail.com','New Deployment - '.PROJECT,PROJECT.' has been updated to the newest commit in Master branch');
 ?>
 
 Done.
