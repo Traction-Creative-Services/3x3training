@@ -10,6 +10,7 @@ class Welcome extends CI_Controller {
 	public function index()
 	{
 		$data['title'] = 'Home';
+		$data['activeTab'] = 'Home';
 		$this->loadViews('home',$data);
 	}
 
@@ -22,9 +23,20 @@ class Welcome extends CI_Controller {
 	public function loadViews($page,$data) 
 	{
 		$data['auth'] = $this->session->userdata('auth');
-
+		$data['menuitems'] = $this->getMenu();
 		$this->load->view('parts/header',$data);
 		$this->load->view('page/'.$page,$data);
 		$this->load->view('parts/footer',$data);
+	}
+	
+	public function getMenu() {
+		$menu = array();
+		$query = $this->db->query('SELECT * FROM sections');
+		foreach($query->result() as $row) {
+			$item['title'] = $row->title;
+			$item['slug'] = $row->slug;
+			$menu[] = $item;
+		}
+		return $menu;
 	}
 }

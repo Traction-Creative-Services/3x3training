@@ -18,6 +18,16 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-36362540-11', 'auto');
+  ga('send', 'pageview');
+
+</script>
   </head>
   <body>
 <?php if($auth) { ?>
@@ -42,14 +52,12 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li <?php if($activeTab == 'mat') echo 'class="active"'; ?>><a href="#">Mat Exercises</a></li>
-            <li <?php if($activeTab == 'wall') echo 'class="active"'; ?>><a href="#">Upper Body / Wall</a></li>
-            <li <?php if($activeTab == 'standing') echo 'class="active"'; ?>><a href="#">Standing</a></li>
-            <li <?php if($activeTab == 'senior') echo 'class="active"'; ?>><a href="#">Senior</a></li>
-            <li <?php if($activeTab == 'barre') echo 'class="active"'; ?>><a href="#">Barre</a></li>
+	   <?php foreach($menuitems as $item) { ?>
+	   	<li <?php if($item['slug'] == $activeTab) echo 'class="active"'; ?>><a href="<?php echo site_url('home/index/'.$item['slug']); ?>"><?php echo $item['title']; ?></a></li>
+	   <?php } ?>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="security">Log Out</a></li>
+            <li><a href="<?php echo site_url('security'); ?>">Log Out</a></li>
           </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->

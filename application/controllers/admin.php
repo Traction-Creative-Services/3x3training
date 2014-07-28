@@ -39,8 +39,12 @@ class Admin extends CI_Controller {
 
 		$crud = new grocery_CRUD();
 
-		$crud->set_theme('twitter-bootstrap');
+		$crud->set_theme('datatables');
 		$crud->set_table('videos');
+		$crud->set_relation('section_id','sections','title');
+
+		//$crud->set_field_upload('source','assets/uploads');
+		
 		
 
 		$output = $crud->render();
@@ -54,7 +58,7 @@ class Admin extends CI_Controller {
 
 		$crud = new grocery_CRUD();
 
-		$crud->set_theme('twitter-bootstrap');
+		$crud->set_theme('datatables');
 		$crud->set_table('sections');
 		
 
@@ -76,5 +80,16 @@ class Admin extends CI_Controller {
 		$this->load->view('parts/header',$data);
 		$this->load->view('page/'.$page,$data);
 		$this->load->view('parts/footer',$data);
+	}
+	
+		public function getMenu() {
+		$menu = array();
+		$query = $this->db->query('SELECT * FROM sections');
+		foreach($query->result() as $row) {
+			$item['title'] = $row->title;
+			$item['slug'] = $row->slug;
+			$menu[] = $item;
+		}
+		return $menu;
 	}
 }

@@ -7,11 +7,11 @@ class Home extends CI_Controller {
 	 * @author Martin Sheeks
 	 * 
 	 */
-	public function index()
+	public function index($section = 'mat_exercises')
 	{
 		$data['title'] = 'Home';
-		$data['activeTab'] = 'mat';
-		$data['category'] = $this->getVideos('mat');
+		$data['activeTab'] = $section;
+		$data['section'] = $this->getSection($section);
 		$this->loadViews('lists',$data);
 	}
 
@@ -23,51 +23,39 @@ class Home extends CI_Controller {
 	*/
 	public function loadViews($page,$data) 
 	{
+		$data['menuitems'] = $this->getMenu();
 		$data['auth'] = $this->session->userdata('auth');
 		$this->load->view('parts/header',$data);
 		$this->load->view('page/'.$page,$data);
 		$this->load->view('parts/footer',$data);
 	}
+	
+	public function getMenu() {
+		$menu = array();
+		$query = $this->db->query('SELECT * FROM sections');
+		foreach($query->result() as $row) {
+			$item['title'] = $row->title;
+			$item['slug'] = $row->slug;
+			$menu[] = $item;
+		}
+		return $menu;
+	}
 
 	/**
-	* Gets the videos for a given tab.
+	* Gets the requested section
 	* @author Martin Sheeks <martin.sheeks@gmail.com>
-	* @param string $category the category to load
+	* @param string $slug the category to load
 	* @return array $list the list of videos
 	*/
-	public function getVideos($cat) {	
-		//video category lists
-		$mat = array(
-			'title'			=> 'Mat Exercises',
-			'description'	=> 'lorem ipsum',
-			'videos'		=> array(
-					array(
-						'title' => 'Segment One Exercises One to Four',
-						'src'	=> 'seg1_exercise1to4.mp4'
-						),
-					array(
-						'title' => 'Segment One Exercises Five to Seven',
-						'src'	=> 'seg1_exercise5to7.mp4'
-						),
-					array(
-						'title' => 'Segment One Pilates',
-						'src'	=> 'seg1_pilates.mp4'
-						),
-					array(
-						'title'	=> 'Segment One Bodyslide',
-						'src'	=> 'seg1_bodyslide.mp4'
-						),
-					array(
-						'title' => 'Segment One Tucks to Superman',
-						'src'	=> 'seg1_tuckstosuperman.mp4'
-						),
-					array(
-						'title' => 'Segment One Bun and Thighs',
-						'src'	=> 'seg1_bunandthigh.mp4'
-						)
-					)
-			);
+	public function getSection($slug) {	
+		
+		$results = array();	
 
-		return $$cat;
+		$query = $this->db->query('SELECT s.title as sectionTitle, s.description sectionDesc, v.title as vidTitle, v.description as vidDesc, v.source as src FROM sections s INNER JOIN videos v ON s.section_id = v.section_id WHERE s.slug ="'.$slug.'"');
+
+		foreach($query->result() as $row) {
+			$results[] = $row;
+		}
+		return $results;
 	}
 }
